@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -30,6 +31,9 @@ public class OrderEntity {
 
     @Column(name = "price_total")
     private BigDecimal total;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    private List<OrderItemEntity> items;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,20 +29,25 @@ public class UserService {
 
     public UserResponseDTO createUser (UserRequestDTO userRequestDTO) {
         validateEmail(userRequestDTO.getEmail());
-        userRequestDTO.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
         UserEntity user = appMapper.toEntity(userRequestDTO);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return appMapper.toResponse(userRepository.save(user));
     }
 
-    public UserResponseDTO getUserByEmail (String email) {
+    public UserResponseDTO getUserById (Long id) {
+        return appMapper.toResponse(userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("Usuário não encontrado")));
+    }
+
+    public UserResponseDTO findByEmail (String email) {
         return appMapper.toResponse(userRepository.findByEmail(email).orElseThrow(() ->
                 new ResourceNotFoundException("Usuário não encontrado")));
     }
 
-    public List<UserResponseDTO> getAllUser() {
+    public List<UserResponseDTO> getAllUsers() {
         return userRepository.findAll()
                 .stream()
                 .map(appMapper::toResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 }

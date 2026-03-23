@@ -18,6 +18,7 @@ public interface AppMapper {
     ProductEntity toEntity(ProductRequestDTO dto);
     ProductResponseDTO toResponse(ProductEntity entity);
 
+    OrderEntity toEntity(OrderRequestDTO dto);
     OrderResponseDTO toResponse(OrderEntity entity);
 
     OrderItemResponseDTO toResponse(OrderItemEntity entity);
