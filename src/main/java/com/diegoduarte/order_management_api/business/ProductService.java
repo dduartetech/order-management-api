@@ -25,14 +25,10 @@ public class ProductService {
     }
 
     public List<ProductResponseDTO> getAllProducts () {
-        List<ProductEntity> products = productRepository.findAll();
-        List<ProductResponseDTO> dtos = new ArrayList<>();
-
-        for (ProductEntity product: products ) {
-            dtos.add(appMapper.toResponse(product));
-        }
-
-        return dtos;
+        return productRepository.findAll()
+                .stream()
+                .map(appMapper::toResponse)
+                .toList();
     }
 
     public ProductResponseDTO getProductById (Long id) {
@@ -52,8 +48,11 @@ public class ProductService {
         return appMapper.toResponse(productRepository.save(product));
     }
 
-    public void deleteProductById (Long id) {
-        productRepository.deleteById(id);
+    public void deleteProductById(Long id) {
+        ProductEntity product = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não localizado"));
+
+        productRepository.delete(product);
     }
 
 }
