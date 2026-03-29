@@ -2,30 +2,27 @@ package com.diegoduarte.order_management_api.infrastructure.security;
 
 import com.diegoduarte.order_management_api.infrastructure.entity.UserEntity;
 import com.diegoduarte.order_management_api.infrastructure.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    // Repositório para acessar dados de usuário no banco de dados
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    // Implementação do método para carregar detalhes do usuário pelo e-mail
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // Busca o usuário no banco de dados pelo e-mail
         UserEntity user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + email));
 
-        // Cria e retorna um objeto UserDetails com base no usuário encontrado
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail()) // Define o nome de usuário como o e-mail
-                .password(user.getPassword()) // Define a senha do usuário
-                .build(); // Constrói o objeto UserDetails
+        return User.withUsername(user.getEmail())
+                .password(user.getPassword())
+                .roles("USER") // Define uma role padrão para evitar erros de autorização
+                .build();
     }
 }

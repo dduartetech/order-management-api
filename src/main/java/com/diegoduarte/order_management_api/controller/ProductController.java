@@ -3,8 +3,10 @@ package com.diegoduarte.order_management_api.controller;
 import com.diegoduarte.order_management_api.business.ProductService;
 import com.diegoduarte.order_management_api.business.dto.product.ProductRequestDTO;
 import com.diegoduarte.order_management_api.business.dto.product.ProductResponseDTO;
+import com.diegoduarte.order_management_api.infrastructure.security.SecurityConfig;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequestMapping("/products")
 @Tag(name = "Products", description = "Product management APIs")
 @RequiredArgsConstructor
+@SecurityRequirement(name = SecurityConfig.SECURITY_SCHEME)
 public class ProductController {
 
     private final ProductService productService;

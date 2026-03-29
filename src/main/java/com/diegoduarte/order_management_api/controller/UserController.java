@@ -3,8 +3,10 @@ package com.diegoduarte.order_management_api.controller;
 import com.diegoduarte.order_management_api.business.UserService;
 import com.diegoduarte.order_management_api.business.dto.user.UserRequestDTO;
 import com.diegoduarte.order_management_api.business.dto.user.UserResponseDTO;
+import com.diegoduarte.order_management_api.infrastructure.security.SecurityConfig;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 @RequestMapping("/users")
 @Tag(name = "Users", description = "User management APIs")
 @RequiredArgsConstructor
+@SecurityRequirement(name = SecurityConfig.SECURITY_SCHEME)
 public class UserController {
 
     private final UserService userService;
@@ -25,6 +28,11 @@ public class UserController {
     @ApiResponse(responseCode = "200", description = "User created")
     public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserRequestDTO dto) {
         return ResponseEntity.ok(userService.createUser(dto));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> login(@RequestBody UserRequestDTO dto) {
+        return ResponseEntity.ok(userService.autenticarUsuario(dto));
     }
 
     @GetMapping("/{id}")
