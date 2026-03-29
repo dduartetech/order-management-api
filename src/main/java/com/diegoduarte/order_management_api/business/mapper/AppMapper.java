@@ -7,6 +7,7 @@ import com.diegoduarte.order_management_api.infrastructure.entity.*;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
@@ -21,9 +22,10 @@ public interface AppMapper {
     OrderEntity toEntity(OrderRequestDTO dto);
     OrderResponseDTO toResponse(OrderEntity entity);
 
+    @Mapping(source = "product.id", target = "productId")
+    @Mapping(source = "product.name", target = "productName")
     OrderItemResponseDTO toResponse(OrderItemEntity entity);
 
     @BeanMapping(nullValuePropertyMappingStrategy = org.mapstruct.NullValuePropertyMappingStrategy.IGNORE)
     void updateProductFromDto(ProductRequestDTO dto, @MappingTarget ProductEntity entity);
-
 }
