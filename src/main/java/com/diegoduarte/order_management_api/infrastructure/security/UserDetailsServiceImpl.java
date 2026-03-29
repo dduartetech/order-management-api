@@ -22,7 +22,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         return User.withUsername(user.getEmail())
                 .password(user.getPassword())
-                .roles("USER") // Define uma role padrão para evitar erros de autorização
+                .roles("USER")
                 .build();
     }
 }
